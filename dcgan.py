@@ -1,15 +1,13 @@
 from keras.models import Sequential, Model, load_model
 from keras.layers import UpSampling2D, Conv2D, Activation, BatchNormalization, Reshape, Dense, Input, LeakyReLU, Dropout, Flatten, ZeroPadding2D
 from keras.optimizers import Adam
-
 import glob
 from PIL import Image
 import numpy as np
 import os
 import argparse
 from ast import literal_eval
-
-from scipy.misc import imsave
+import imageio
 
 
 class DCGAN:
@@ -220,7 +218,7 @@ class DCGAN:
             path = "{}/generated_{}x{}".format(self.output_directory, self.img_size[0], self.img_size[1])
             if not os.path.exists(path):
                 os.makedirs(path)
-            imsave(path + "/{}_{}.png".format(epoch, i), img_array)
+            imageio.imwrite(path + "/{}_{}.png".format(epoch, i), img_array)
 
         nindex, height, width, intensity = imgs.shape
         nrows = nindex // c
@@ -233,7 +231,7 @@ class DCGAN:
         path = "{}/gallery_generated_{}x{}".format(slf.output_directory, self.img_size[0], self.img_size[1])
         if not os.path.exists(path):
             os.makedirs(path)
-        imsave(path + "/{}.png".format(epoch), gallery)
+        imageio.imwrite(path + "/{}.png".format(epoch), gallery)
 
     def generate_imgs(self, count, threshold, modifier):
         self.build_gan()
@@ -258,7 +256,7 @@ class DCGAN:
             path = "{}/generated_{}_{}".format(self.output_directory, threshold[0], threshold[1])
             if not os.path.exists(path):
                 os.makedirs(path)
-            imsave(path + "/{}_{}.png".format(modifier, i), img_array)
+            imageio.imwrite(path + "/{}_{}.png".format(modifier, i), img_array)
 
 
 if __name__ == '__main__':
