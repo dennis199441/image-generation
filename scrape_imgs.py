@@ -44,7 +44,7 @@ def save_img_from_url(img_url, name):
     if response.status_code == 200:
         if not os.path.exists("output"):
             os.makedirs("output")
-        with open(f"output/{name}.png", 'wb+') as f:
+        with open("data/{}.png".format(name), 'wb+') as f:
             f.write(response.content)
 
 def html_to_bs4(html):

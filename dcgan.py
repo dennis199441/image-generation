@@ -190,7 +190,7 @@ class DCGAN:
             d_loss = 0.5 * np.add(d_loss_real, d_loss_fake)
 
             # Print progress
-            print(f"{epoch} [D loss: {d_loss[0]} | D Accuracy: {100 * d_loss[1]}] [G loss: {g_loss}]")
+            print("{} [D loss: {} | D Accuracy: {100 * d_loss[1]}] [G loss: {}]".format(epoch, d_loss[0], g_loss))
 
             # If at save interval => save generated image samples, save model files
             if epoch % (save_interval) == 0:
@@ -217,10 +217,10 @@ class DCGAN:
         imgs = 0.5 * imgs + 0.5
 
         for i, img_array in enumerate(imgs):
-            path = f"{self.output_directory}/generated_{self.img_size[0]}x{self.img_size[1]}"
+            path = "{}/generated_{}x{}".format(self.output_directory, self.img_size[0], self.img_size[1])
             if not os.path.exists(path):
                 os.makedirs(path)
-            imsave(path + f"/{epoch}_{i}.png", img_array)
+            imsave(path + "/{}_{}.png".format(epoch, i), img_array)
 
         nindex, height, width, intensity = imgs.shape
         nrows = nindex // c
@@ -230,10 +230,10 @@ class DCGAN:
                   .swapaxes(1, 2)
                   .reshape(height * nrows, width * c, intensity))
 
-        path = f"{self.output_directory}/gallery_generated_{self.img_size[0]}x{self.img_size[1]}"
+        path = "{}/gallery_generated_{}x{}".format(slf.output_directory, self.img_size[0], self.img_size[1])
         if not os.path.exists(path):
             os.makedirs(path)
-        imsave(path + f"/{epoch}.png", gallery)
+        imsave(path + "/{}.png".format(epoch), gallery)
 
     def generate_imgs(self, count, threshold, modifier):
         self.build_gan()
@@ -255,10 +255,10 @@ class DCGAN:
 
         print(imgs.shape)
         for i, img_array in enumerate(imgs):
-            path = f"{self.output_directory}/generated_{threshold[0]}_{threshold[1]}"
+            path = "{}/generated_{}_{}".format(self.output_directory, threshold[0], threshold[1])
             if not os.path.exists(path):
                 os.makedirs(path)
-            imsave(path + f"/{modifier}_{i}.png", img_array)
+            imsave(path + "/{}_{}.png".format(modifier, i), img_array)
 
 
 if __name__ == '__main__':

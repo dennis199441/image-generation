@@ -13,9 +13,9 @@ class ImageProcessor:
             img = ImageOps.fit(img, (self.img_size[0], self.img_size[1]), Image.ANTIALIAS)
             name = img_path.split("\\")[-1].split('.')[0]
             name = name.replace('data/', '')
-            if not os.path.exists(f"resized_{self.img_size[0]}_{self.img_size[1]}"):
-                os.makedirs(f"resized_{self.img_size[0]}_{self.img_size[1]}")
-            img.save(f"resized_{self.img_size[0]}_{self.img_size[1]}/{name}.png")
+            if not os.path.exists("resized_{}_{}".format(self.img_size[0],self.img_size[1])):
+                os.makedirs("resized_{}_{}".format(self.img_size[0],self.img_size[1]))
+            img.save("resized_{}_{}/{}.png".format(self.img_size[0],self.img_size[1], name))
 
 
 imgprocessor = ImageProcessor((256, 192))
