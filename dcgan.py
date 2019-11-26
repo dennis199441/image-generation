@@ -1,13 +1,15 @@
 from keras.models import Sequential, Model, load_model
 from keras.layers import UpSampling2D, Conv2D, Activation, BatchNormalization, Reshape, Dense, Input, LeakyReLU, Dropout, Flatten, ZeroPadding2D
 from keras.optimizers import Adam
+
 import glob
 from PIL import Image
 import numpy as np
 import os
 import argparse
 from ast import literal_eval
-import imageio
+
+from scipy.misc import imsave
 
 
 class DCGAN:
@@ -166,13 +168,9 @@ class DCGAN:
         half_batch = batch_size // 2
 
         for epoch in range(epochs):
-
-
             # Train Generator
             noise = np.random.normal(0, 1, (batch_size, 100))
             g_loss = self.combined.train_on_batch(noise, np.ones((batch_size, 1)))
-
-
 
             # Train Discriminator
             idx = np.random.randint(0, X_train.shape[0], half_batch)
@@ -188,7 +186,7 @@ class DCGAN:
             d_loss = 0.5 * np.add(d_loss_real, d_loss_fake)
 
             # Print progress
-            print("{} [D loss: {} | D Accuracy: {100 * d_loss[1]}] [G loss: {}]".format(epoch, d_loss[0], g_loss))
+            print("{} [D loss: {} | D Accuracy: {}] [G loss: {}]".format(epoch, d_loss[0], 100 * d_loss[1], g_loss))
 
             # If at save interval => save generated image samples, save model files
             if epoch % (save_interval) == 0:
@@ -218,7 +216,7 @@ class DCGAN:
             path = "{}/generated_{}x{}".format(self.output_directory, self.img_size[0], self.img_size[1])
             if not os.path.exists(path):
                 os.makedirs(path)
-            imageio.imwrite(path + "/{}_{}.png".format(epoch, i), img_array)
+            imsave(path + "/{}_{}.png".format(epoch, i), img_array)
 
         nindex, height, width, intensity = imgs.shape
         nrows = nindex // c
@@ -228,10 +226,10 @@ class DCGAN:
                   .swapaxes(1, 2)
                   .reshape(height * nrows, width * c, intensity))
 
-        path = "{}/gallery_generated_{}x{}".format(slf.output_directory, self.img_size[0], self.img_size[1])
+        path = "{}/gallery_generated_{}x{}".format(self.output_directory, self.img_size[0], self.img_size[1])
         if not os.path.exists(path):
             os.makedirs(path)
-        imageio.imwrite(path + "/{}.png".format(epoch), gallery)
+        imsave(path + "/{}.png".format(epoch), gallery)
 
     def generate_imgs(self, count, threshold, modifier):
         self.build_gan()
@@ -256,7 +254,7 @@ class DCGAN:
             path = "{}/generated_{}_{}".format(self.output_directory, threshold[0], threshold[1])
             if not os.path.exists(path):
                 os.makedirs(path)
-            imageio.imwrite(path + "/{}_{}.png".format(modifier, i), img_array)
+            imsave(path + "/{}_{}.png".format(modifier, i), img_array)
 
 
 if __name__ == '__main__':
