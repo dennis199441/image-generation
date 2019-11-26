@@ -161,6 +161,7 @@ class DCGAN:
         self.build_gan()
         X_train = self.load_imgs(image_path)
         print("Training Data Shape: ", X_train.shape)
+        print("Training Data dtype: ", X_train.dtype)
 
         # Rescale images from -1 to 1
         X_train = (X_train.astype(np.float32) - 127.5) / 127.5
