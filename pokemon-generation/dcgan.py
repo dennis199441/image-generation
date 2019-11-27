@@ -144,7 +144,7 @@ def train(epochs, BATCH_SIZE, weights=False):
             if index % 20 == 0 and epoch % 10 == 0:
                 image = combine_images(generated_images)
                 image = image*127.5+127.5
-                destpath = os.path.normpath(os.getcwd()+ "/logo-generated-images/"+str(epoch)+"_"+str(index)+".png")
+                destpath = os.path.normpath(os.getcwd()+ "/generated-pokemon/"+str(epoch)+"_"+str(index)+".png")
                 Image.fromarray(image.astype(np.uint8)).save(destpath)
             X = np.concatenate((image_batch, generated_images))
             y = [1] * BATCH_SIZE + [0] * BATCH_SIZE
